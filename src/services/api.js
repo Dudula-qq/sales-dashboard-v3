@@ -107,6 +107,39 @@ export const projectApi = {
       return projects[index];
     }
     return null;
+  },
+
+  async add(data, user) {
+    await delay(150);
+    const newProject = {
+      id: Math.max(...projects.map(p => p.id), 0) + 1,
+      name: data.name,
+      customer: data.customer,
+      stage: data.stage || 'S1',
+      progress: data.progress || 0,
+      amount: data.amount || 0,
+      expectedAmount: data.expectedAmount || data.amount || 0,
+      actualAmount: null,
+      startDate: data.startDate || new Date().toISOString().split('T')[0],
+      expectedClose: data.expectedClose || '',
+      stageEnterDate: new Date().toISOString().split('T')[0],
+      description: data.description || '',
+      salesId: user?.id || data.salesId,
+      salesName: user?.name || data.salesName || '',
+      milestones: data.stage && data.stage !== 'S1' ? [{ stage: data.stage, date: new Date().toISOString().split('T')[0], note: '创建商机' }] : [{ stage: 'S1', date: new Date().toISOString().split('T')[0], note: '机会确认' }],
+    };
+    projects.push(newProject);
+    return newProject;
+  },
+
+  async update(id, data) {
+    await delay(100);
+    const index = projects.findIndex(p => p.id === id);
+    if (index !== -1) {
+      Object.assign(projects[index], data);
+      return projects[index];
+    }
+    return null;
   }
 };
 

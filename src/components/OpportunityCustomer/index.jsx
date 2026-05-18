@@ -32,6 +32,11 @@ const OpportunityCustomer = ({ user }) => {
   const [editMode, setEditMode] = useState(false);
   const [editForm, setEditForm] = useState({});
 
+  // 新建商机弹窗
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [addForm, setAddForm] = useState({});
+  const [adding, setAdding] = useState(false);
+
   // 客户等级变更
   const [gradeChangeModal, setGradeChangeModal] = useState(null);
   const [newGrade, setNewGrade] = useState('');
@@ -102,6 +107,7 @@ const OpportunityCustomer = ({ user }) => {
       salesName: selectedProject.salesName,
       expectedClose: selectedProject.expectedClose || '',
       stage: selectedProject.stage,
+      description: selectedProject.description || '',
     });
     setEditMode(true);
   };
@@ -112,11 +118,36 @@ const OpportunityCustomer = ({ user }) => {
       const updated = [...projects];
       updated[idx] = { ...updated[idx], ...editForm };
       setProjects(updated);
-      await projectApi.updateStage(selectedProject.id, editForm.stage);
+      await projectApi.update(selectedProject.id, editForm);
       emitDataChange('project_changed');
       setSelectedProject(updated[idx]);
     }
     setEditMode(false);
+  };
+
+  // ========== 新建商机 ==========
+  const openAddModal = () => {
+    setAddForm({
+      name: '',
+      customer: '',
+      stage: 'S1',
+      amount: 0,
+      expectedAmount: 0,
+      expectedClose: '',
+      description: '',
+      salesName: user?.name || '',
+    });
+    setShowAddModal(true);
+  };
+
+  const submitAdd = async () => {
+    if (!addForm.name.trim() || !addForm.customer.trim()) return;
+    setAdding(true);
+    const newProject = await projectApi.add(addForm, user);
+    setProjects(prev => [...prev, newProject]);
+    emitDataChange('project_changed');
+    setShowAddModal(false);
+    setAdding(false);
   };
 
   // ========== 客户分级 ==========
@@ -270,6 +301,7 @@ const OpportunityCustomer = ({ user }) => {
               <option value="">全部销售</option>
               {salesNames.map(s => <option key={s} value={s}>{s}</option>)}
             </select>
+            {user?.role === 'sales' && <button className="btn btn-primary" onClick={openAddModal}>新建商机</button>}
           </div>
         </div>
         <div className="kanban-board eight-stage">
@@ -457,7 +489,69 @@ const OpportunityCustomer = ({ user }) => {
         )}
       </section>
 
-      {/* 商机详情弹窗 */}
+      {/* 新建商机弹窗 */}
+      {showAddModal && (
+        <div className="modal-overlay" onClick={() => setShowAddModal(false)}>
+          <div className="modal-content opp-add-modal" onClick={e => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>新建商机</h3>
+              <button className="modal-close" onClick={() => setShowAddModal(false)}>&times;</button>
+            </div>
+            <div className="modal-body">
+              <div className="opp-add-form">
+                <div className="opp-add-field">
+                  <label>项目名称 <span className="required">*</span></label>
+                  <input className="opp-add-input" placeholder="请输入项目名称"
+                    value={addForm.name || ''} onChange={e => setAddForm({...addForm, name: e.target.value})} />
+                </div>
+                <div className="opp-add-field">
+                  <label>客户名称 <span className="required">*</span></label>
+                  <input className="opp-add-input" placeholder="请输入客户名称"
+                    value={addForm.customer || ''} onChange={e => setAddForm({...addForm, customer: e.target.value})} />
+                </div>
+                <div className="opp-add-field">
+                  <label>当前阶段</label>
+                  <select className="opp-add-input" value={addForm.stage || 'S1'}
+                    onChange={e => setAddForm({...addForm, stage: e.target.value})}>
+                    {stages.map(s => <option key={s.code} value={s.code}>{s.code} {s.name}</option>)}
+                  </select>
+                </div>
+                <div className="opp-add-row">
+                  <div className="opp-add-field">
+                    <label>商机金额</label>
+                    <input className="opp-add-input" type="number" placeholder="0"
+                      value={addForm.amount || ''} onChange={e => setAddForm({...addForm, amount: Number(e.target.value)})} />
+                  </div>
+                  <div className="opp-add-field">
+                    <label>预期金额</label>
+                    <input className="opp-add-input" type="number" placeholder="0"
+                      value={addForm.expectedAmount || ''} onChange={e => setAddForm({...addForm, expectedAmount: Number(e.target.value)})} />
+                  </div>
+                </div>
+                <div className="opp-add-field">
+                  <label>预计关闭日期</label>
+                  <input className="opp-add-input" type="date"
+                    value={addForm.expectedClose || ''} onChange={e => setAddForm({...addForm, expectedClose: e.target.value})} />
+                </div>
+                <div className="opp-add-field">
+                  <label>项目描述</label>
+                  <textarea className="opp-add-textarea" placeholder="请输入项目描述..."
+                    value={addForm.description || ''} onChange={e => setAddForm({...addForm, description: e.target.value})} rows={3} />
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-default" onClick={() => setShowAddModal(false)}>取消</button>
+              <button className="btn btn-primary" onClick={submitAdd}
+                disabled={adding || !addForm.name?.trim() || !addForm.customer?.trim()}>
+                {adding ? '创建中...' : '创建商机'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 商机详情/补充弹窗 */}
       {selectedProject && (
         <div className="modal-overlay" onClick={() => { setSelectedProject(null); setEditMode(false); }}>
           <div className="modal-content opp-detail-modal" onClick={e => e.stopPropagation()}>
@@ -496,14 +590,14 @@ const OpportunityCustomer = ({ user }) => {
                     </select>
                   </div>
                   <div className="detail-item">
-                    <label>销售</label>
-                    <input className="opp-edit-input" value={editForm.salesName}
-                      onChange={e => setEditForm({...editForm, salesName: e.target.value})} />
-                  </div>
-                  <div className="detail-item">
                     <label>预计关闭</label>
                     <input className="opp-edit-input" type="date" value={editForm.expectedClose}
                       onChange={e => setEditForm({...editForm, expectedClose: e.target.value})} />
+                  </div>
+                  <div className="detail-item">
+                    <label>项目描述</label>
+                    <textarea className="opp-edit-input opp-edit-textarea" value={editForm.description}
+                      onChange={e => setEditForm({...editForm, description: e.target.value})} rows={3} />
                   </div>
                   <div className="detail-edit-actions">
                     <button className="btn btn-primary btn-sm" onClick={saveEdit}>保存</button>
@@ -518,12 +612,15 @@ const OpportunityCustomer = ({ user }) => {
                     <div className="detail-item"><label>商机金额</label><span>¥{(selectedProject.amount || 0).toLocaleString()}</span></div>
                     <div className="detail-item"><label>预期金额</label><span>¥{(selectedProject.expectedAmount || 0).toLocaleString()}</span></div>
                     <div className="detail-item"><label>销售</label><span>{selectedProject.salesName}</span></div>
-                    <div className="detail-item"><label>预计关闭</label><span>{selectedProject.expectedClose}</span></div>
-                    {selectedProject.actualAmount && (
+                    <div className="detail-item"><label>预计关闭</label><span>{selectedProject.expectedClose || '-'}</span></div>
+                    {selectedProject.description && (
+                      <div className="detail-item detail-item-full"><label>项目描述</label><span>{selectedProject.description}</span></div>
+                    )}
+                    {selectedProject.actualAmount != null && (
                       <div className="detail-item"><label>实际金额</label><span>¥{selectedProject.actualAmount.toLocaleString()}</span></div>
                     )}
                   </div>
-                  <button className="btn btn-primary btn-sm" style={{ marginTop: 12 }} onClick={startEdit}>编辑</button>
+                  <button className="btn btn-primary btn-sm" style={{ marginTop: 12 }} onClick={startEdit}>补充信息</button>
                 </>
               )}
               {!editMode && selectedProject.milestones && selectedProject.milestones.length > 0 && (

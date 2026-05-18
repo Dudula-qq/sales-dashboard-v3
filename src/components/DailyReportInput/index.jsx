@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { dailyReportApi, customerApi } from '../../services/api';
+import { dailyReportApi, customerApi, projectApi } from '../../services/api';
+import { getProjectStages } from '../../services/api';
 import { emitDataChange } from '../../services/dataEvents';
 import JSZip from 'jszip';
 
@@ -21,6 +22,8 @@ const DailyReportInput = ({ user }) => {
   // 表单录入字段
   const [entries, setEntries] = useState([{ id: Date.now() }]);
   const [customers, setCustomers] = useState([]);
+  const [projects, setProjects] = useState([]);
+  const projectStages = getProjectStages();
 
   // 文档导入
   const [showUploadModal, setShowUploadModal] = useState(false);
@@ -37,6 +40,7 @@ const DailyReportInput = ({ user }) => {
 
   useEffect(() => {
     loadCustomers();
+    loadProjects();
     loadReports();
   }, []);
 
@@ -51,6 +55,12 @@ const DailyReportInput = ({ user }) => {
     }
     const { data } = await customerApi.getList(params);
     setCustomers(data);
+  };
+
+  const loadProjects = async () => {
+    const params = user?.role === 'sales' ? { salesId: user.id } : {};
+    const { data } = await projectApi.getList(params);
+    setProjects(data);
   };
 
   const loadReports = async () => {
@@ -83,7 +93,7 @@ const DailyReportInput = ({ user }) => {
       for (const entry of validEntries) {
         await dailyReportApi.add({
           date,
-          workContent: `【${entry.commType || '拜访'}】${entry.location || ''} - ${entry.person || ''} - ${entry.content || ''}`,
+          workContent: `【${entry.commType || '拜访'}】${entry.companyName ? entry.companyName + ' | ' : ''}${entry.customerStatus ? '阶段:' + entry.customerStatus + ' | ' : ''}${entry.location || ''} - ${entry.person || ''} - ${entry.content || ''}`,
           customers: entry.customer ? [entry.customer] : [],
           nextPlan: entry.conclusion || ''
         }, user);
@@ -317,6 +327,35 @@ const DailyReportInput = ({ user }) => {
                       </button>
                     ))}
                   </div>
+                </div>
+              </div>
+
+              <div className="drv3-entry-row drv3-entry-row-3">
+                <div className="drv3-field">
+                  <label>客户公司名称</label>
+                  <input className="drv3-input" placeholder="如：某某科技有限公司"
+                    value={entry.companyName || ''}
+                    onChange={e => updateEntry(entry.id, 'companyName', e.target.value)} />
+                </div>
+                <div className="drv3-field">
+                  <label>项目名称</label>
+                  <select className="drv3-select" value={entry.projectName || ''}
+                    onChange={e => updateEntry(entry.id, 'projectName', e.target.value)}>
+                    <option value="">选择项目（可选）</option>
+                    {projects.map(p => (
+                      <option key={p.id} value={p.name}>{p.name}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="drv3-field">
+                  <label>客户当前阶段</label>
+                  <select className="drv3-select" value={entry.customerStatus || ''}
+                    onChange={e => updateEntry(entry.id, 'customerStatus', e.target.value)}>
+                    <option value="">选择阶段（可选）</option>
+                    {projectStages.map(s => (
+                      <option key={s.code} value={s.name}>{s.code} {s.name}</option>
+                    ))}
+                  </select>
                 </div>
               </div>
 
