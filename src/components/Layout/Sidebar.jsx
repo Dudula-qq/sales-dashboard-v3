@@ -1,17 +1,15 @@
 import React from 'react';
 
 const allMenuItems = [
-  { key: 'dashboard', label: '销售工作追踪汇总' },
-  { key: 'customer-grade', label: '客户分级管理' },
+  { key: 'dashboard', label: '工作汇总' },
+  { key: 'daily', label: '日报管理' },
+  { key: 'opportunity', label: '商机及客户管理' },
+  { key: 'alert-calendar', label: '风险告警' },
   { key: 'ppl', label: 'PPL管理', roles: ['manager'] },
-  { key: 'alert-calendar', label: '告警与日历' },
-  { key: 'daily', label: '日报录入', roles: ['sales'] },
-  { key: 'weekly', label: '周报汇总', roles: ['manager'] },
-  { key: 'agent', label: '智能体' },
+  { key: 'agent', label: 'AI助手' },
 ];
 
 const Sidebar = ({ collapsed, activeMenu, onMenuClick, onToggle, user }) => {
-  // 根据用户角色过滤菜单
   const menuItems = allMenuItems.filter(item => {
     if (!item.roles) return true;
     return item.roles.includes(user?.role);

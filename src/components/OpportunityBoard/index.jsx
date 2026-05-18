@@ -1,15 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import ReactECharts from 'echarts-for-react';
-import { projectApi, customerApi } from '../../services/api';
-import { getProjectStages, getCustomerGrades } from '../../services/api';
+import { projectApi } from '../../services/api';
+import { getProjectStages } from '../../services/api';
 import { emitDataChange, onDataChange } from '../../services/dataEvents';
 
 const OpportunityBoard = ({ user }) => {
   const [projects, setProjects] = useState([]);
-  const [customers, setCustomers] = useState([]);
   const [stages] = useState(getProjectStages());
-  const [grades] = useState(getCustomerGrades());
-  const [filterGrade, setFilterGrade] = useState('');
   const [filterSales, setFilterSales] = useState('');
   const [selectedProject, setSelectedProject] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -26,12 +22,8 @@ const OpportunityBoard = ({ user }) => {
   const loadData = async () => {
     setLoading(true);
     const params = user?.role === 'sales' ? { salesId: user.id } : {};
-    const [projRes, custRes] = await Promise.all([
-      projectApi.getList(params),
-      customerApi.getList(params),
-    ]);
+    const projRes = await projectApi.getList(params);
     setProjects(projRes.data);
-    setCustomers(custRes.data);
     setLoading(false);
   };
 
@@ -67,17 +59,11 @@ const OpportunityBoard = ({ user }) => {
 
   const filteredProjects = useMemo(() => {
     let result = [...projects];
-    if (filterGrade) {
-      result = result.filter(p => {
-        const c = customers.find(cu => cu.name === p.customer);
-        return c && c.grade === filterGrade;
-      });
-    }
     if (filterSales) {
       result = result.filter(p => p.salesName === filterSales);
     }
     return result;
-  }, [projects, customers, filterGrade, filterSales]);
+  }, [projects, filterSales]);
 
   const projectsByStage = useMemo(() => {
     const map = {};
@@ -87,12 +73,6 @@ const OpportunityBoard = ({ user }) => {
     });
     return map;
   }, [filteredProjects, stages]);
-
-  const getCustomerGrade = (customerName) => {
-    const c = customers.find(cu => cu.name === customerName);
-    if (!c) return null;
-    return grades.find(g => g.key === c.grade);
-  };
 
   const getDaysInStage = (project) => {
     if (!project.stageEnterDate) return '-';
@@ -110,10 +90,6 @@ const OpportunityBoard = ({ user }) => {
       <div className="board-header">
         <h2>商机看板</h2>
         <div className="board-filters">
-          <select value={filterGrade} onChange={e => setFilterGrade(e.target.value)}>
-            <option value="">全部等级</option>
-            {grades.map(g => <option key={g.key} value={g.key}>{g.label}</option>)}
-          </select>
           <select value={filterSales} onChange={e => setFilterSales(e.target.value)}>
             <option value="">全部销售</option>
             {salesNames.map(s => <option key={s} value={s}>{s}</option>)}
@@ -130,7 +106,6 @@ const OpportunityBoard = ({ user }) => {
             </div>
             <div className="kanban-cards">
               {(projectsByStage[stage.code] || []).map(project => {
-                const grade = getCustomerGrade(project.customer);
                 const days = getDaysInStage(project);
                 return (
                   <div
@@ -144,11 +119,6 @@ const OpportunityBoard = ({ user }) => {
                     <div className="opp-card-customer">{project.customer}</div>
                     <div className="opp-card-amount">¥{(project.amount || 0).toLocaleString()}</div>
                     <div className="opp-card-meta">
-                      {grade && (
-                        <span className="grade-tag" style={{ backgroundColor: grade.bgColor, color: grade.color, borderColor: grade.color }}>
-                          {grade.label}
-                        </span>
-                      )}
                       <span className="days-tag">停留{days}天</span>
                     </div>
                   </div>

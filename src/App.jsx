@@ -2,13 +2,10 @@ import React, { useState, useEffect } from 'react';
 import Sidebar from './components/Layout/Sidebar';
 import Header from './components/Layout/Header';
 import CustomerFunnel from './components/CustomerFunnel';
-import CustomerStatusBoard from './components/CustomerStatusBoard';
-import OpportunityBoard from './components/OpportunityBoard';
-import CustomerGradeBoard from './components/CustomerGradeBoard';
+import OpportunityCustomer from './components/OpportunityCustomer';
 import PPLDashboard from './components/PPLDashboard';
 import AlertCenter from './components/AlertCenter';
 import FollowUpCalendar from './components/FollowUpCalendar';
-import TeamManagement from './components/TeamManagement';
 import DailyReportInput from './components/DailyReportInput';
 import DailyReportSummary from './components/DailyReportSummary';
 import WeeklyReportDashboard from './components/WeeklyReportDashboard';
@@ -31,12 +28,12 @@ function App() {
   const [pendingAlerts, setPendingAlerts] = useState([]);
   const [calendarSummary, setCalendarSummary] = useState(0);
   const [alertCalendarTab, setAlertCalendarTab] = useState('alerts');
-  const [weeklyTab, setWeeklyTab] = useState('weekly');
   const [alertDetail, setAlertDetail] = useState(null);
   const [agentTab, setAgentTab] = useState('conversational');
   const [chatAgentId, setChatAgentId] = useState(null);
   const [logsAgentId, setLogsAgentId] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [dailyTab, setDailyTab] = useState('input');
 
   const isManager = currentUser?.role === 'manager';
 
@@ -159,7 +156,7 @@ function App() {
                       </div>
                       {pendingAlerts.length > 0 ? (
                         <div className="dp-alert-list">
-                          {pendingAlerts.map(a => (
+                          {pendingAlerts.slice(0, 5).map(a => (
                             <div key={a.id} className="dp-alert-row" onClick={() => setAlertDetail(a)}>
                               <span className="dp-alert-chip" style={{
                                 color: { red: '#f5222d', orange: '#fa8c16', yellow: '#d4b106', purple: '#722ed1' }[a.severity] || '#fa8c16',
@@ -201,6 +198,20 @@ function App() {
             </div>
           </div>
         );
+      case 'daily':
+        return (
+          <div>
+            <div className="tm-tabs" style={{ marginBottom: 20 }}>
+              <button className={`tm-tab ${dailyTab === 'input' ? 'active' : ''}`} onClick={() => setDailyTab('input')}>日报录入</button>
+              {isManager && (
+                <button className={`tm-tab ${dailyTab === 'summary' ? 'active' : ''}`} onClick={() => setDailyTab('summary')}>日报汇总</button>
+              )}
+            </div>
+            {dailyTab === 'input' ? <DailyReportInput user={currentUser} /> : <DailyReportSummary />}
+          </div>
+        );
+      case 'opportunity':
+        return <OpportunityCustomer user={currentUser} />;
       case 'alert-calendar':
         return (
           <div>
@@ -211,22 +222,8 @@ function App() {
             {alertCalendarTab === 'alerts' ? <AlertCenter user={currentUser} /> : <FollowUpCalendar user={currentUser} />}
           </div>
         );
-      case 'customer-grade':
-        return <CustomerGradeBoard user={currentUser} />;
       case 'ppl':
         return <PPLDashboard user={currentUser} />;
-      case 'daily':
-        return <DailyReportInput user={currentUser} />;
-      case 'weekly':
-        return (
-          <div>
-            <div className="tm-tabs" style={{ marginBottom: 20 }}>
-              <button className={`tm-tab ${weeklyTab === 'weekly' ? 'active' : ''}`} onClick={() => setWeeklyTab('weekly')}>周报汇总</button>
-              <button className={`tm-tab ${weeklyTab === 'team' ? 'active' : ''}`} onClick={() => setWeeklyTab('team')}>团队管理</button>
-            </div>
-            {weeklyTab === 'weekly' ? <WeeklyReportDashboard /> : <TeamManagement user={currentUser} />}
-          </div>
-        );
       case 'agent':
         if (logsAgentId) {
           return <AutomationLogs agentId={logsAgentId} onBack={() => setLogsAgentId(null)} />;
