@@ -119,7 +119,7 @@ const DailyReportSummary = () => {
 
         {(selectedUser ? allReports.filter(r => r.userId === selectedUser) : allReports).length === 0 && (
           <div className="empty-state" style={{ padding: '40px' }}>
-            <div style={{ fontSize: '32px', marginBottom: '8px' }}>📝</div>
+            <div style={{ fontSize: '32px', marginBottom: '8px', color: '#bfbfbf' }}>&#9776;</div>
             <div>暂无日报记录</div>
           </div>
         )}

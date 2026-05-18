@@ -300,7 +300,7 @@ const DailyReportInput = ({ user }) => {
                 }}
                 onClick={() => document.getElementById('daily-docx-upload').click()}
               >
-                <div style={{ fontSize: '48px', marginBottom: '16px' }}>📄</div>
+                <div style={{ fontSize: '48px', marginBottom: '16px', color: '#bfbfbf' }}>&#9997;</div>
                 <div style={{ fontSize: '16px', color: '#333', marginBottom: '8px' }}>点击或拖拽文件到此区域上传</div>
                 <div style={{ fontSize: '13px', color: '#999' }}>仅支持 .docx 格式文件</div>
                 <input

@@ -131,7 +131,7 @@ const ProjectProgress = ({ user }) => {
 
       {!loading && projects.length === 0 && (
         <div className="empty-state">
-          <div className="empty-icon">📁</div>
+          <div className="empty-icon" style={{ color: '#bfbfbf' }}>—</div>
           <div>暂无项目数据</div>
         </div>
       )}

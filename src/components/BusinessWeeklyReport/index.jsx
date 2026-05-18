@@ -65,7 +65,7 @@ const BusinessWeeklyReport = ({ standalone }) => {
       <div style={{ background: standalone ? '#fff' : 'transparent', borderRadius: '8px', padding: standalone ? '24px' : '0' }}>
         {standalone && <div className="card-title">周报汇总</div>}
         <div className="empty-state">
-          <div className="empty-icon">📅</div>
+          <div className="empty-icon" style={{ color: '#bfbfbf', fontSize: '48px' }}>-</div>
           <div>暂无周报数据</div>
           <button className="btn btn-primary" style={{ marginTop: '16px' }} onClick={() => {
             setReport({

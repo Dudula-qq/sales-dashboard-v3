@@ -98,7 +98,7 @@ const TodoReminder = ({ user, standalone }) => {
       <div className="todo-list">
         {incompleteTodos.length === 0 && completedTodos.length === 0 && (
           <div className="empty-state" style={{ padding: '20px' }}>
-            <div style={{ fontSize: '32px', marginBottom: '8px' }}>✅</div>
+            <div style={{ fontSize: '32px', marginBottom: '8px', color: '#bfbfbf' }}>&#10003;</div>
             <div>暂无待办事项</div>
           </div>
         )}
@@ -121,7 +121,7 @@ const TodoReminder = ({ user, standalone }) => {
               </div>
             </div>
             <div className="todo-actions">
-              <span className="todo-delete" onClick={() => handleDelete(todo.id)}>🗑</span>
+              <span className="todo-delete" onClick={() => handleDelete(todo.id)}>×</span>
             </div>
           </div>
         ))}
@@ -147,7 +147,7 @@ const TodoReminder = ({ user, standalone }) => {
               </div>
             </div>
             <div className="todo-actions">
-              <span className="todo-delete" onClick={() => handleDelete(todo.id)}>🗑</span>
+              <span className="todo-delete" onClick={() => handleDelete(todo.id)}>×</span>
             </div>
           </div>
         ))}

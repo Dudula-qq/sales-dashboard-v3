@@ -1,10 +1,13 @@
 import React from 'react';
 
 const allMenuItems = [
-  { key: 'dashboard', icon: '📊', label: '销售工作追踪汇总' },
-  { key: 'projects', icon: '📁', label: '项目进度' },
-  { key: 'daily', icon: '📝', label: '日报录入', roles: ['sales'] },
-  { key: 'weekly', icon: '📅', label: '周报汇总', roles: ['manager'] },
+  { key: 'dashboard', label: '销售工作追踪汇总' },
+  { key: 'customer-grade', label: '客户分级管理' },
+  { key: 'ppl', label: 'PPL管理', roles: ['manager'] },
+  { key: 'alert-calendar', label: '告警与日历' },
+  { key: 'daily', label: '日报录入', roles: ['sales'] },
+  { key: 'weekly', label: '周报汇总', roles: ['manager'] },
+  { key: 'agent', label: '智能体' },
 ];
 
 const Sidebar = ({ collapsed, activeMenu, onMenuClick, onToggle, user }) => {
@@ -17,7 +20,7 @@ const Sidebar = ({ collapsed, activeMenu, onMenuClick, onToggle, user }) => {
   return (
     <aside className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
       <div className="sidebar-header">
-        <span className="sidebar-logo">{collapsed ? '📊' : '销售看板'}</span>
+        <span className="sidebar-logo">{collapsed ? 'S' : '销售看板'}</span>
       </div>
 
       <nav className="sidebar-menu">
@@ -27,14 +30,13 @@ const Sidebar = ({ collapsed, activeMenu, onMenuClick, onToggle, user }) => {
             className={`menu-item ${activeMenu === item.key ? 'active' : ''}`}
             onClick={() => onMenuClick(item.key)}
           >
-            <span className="menu-icon">{item.icon}</span>
             <span className="menu-text">{item.label}</span>
           </div>
         ))}
       </nav>
 
       <div className="sidebar-toggle" onClick={onToggle}>
-        {collapsed ? '▶' : '◀'}
+        {collapsed ? '\u203A' : '\u2039'}
       </div>
     </aside>
   );

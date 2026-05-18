@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { customerApi } from '../../services/api';
+import { onDataChange } from '../../services/dataEvents';
 
 const CustomerStatusBoard = ({ user }) => {
   const [customers, setCustomers] = useState([]);
@@ -9,6 +10,8 @@ const CustomerStatusBoard = ({ user }) => {
 
   useEffect(() => {
     loadCustomers();
+    const off = onDataChange('customer_changed', loadCustomers);
+    return off;
   }, [statusFilter, user]);
 
   const loadCustomers = async () => {
@@ -108,7 +111,7 @@ const CustomerStatusBoard = ({ user }) => {
 
       {!loading && customers.length === 0 && (
         <div className="empty-state">
-          <div className="empty-icon">📭</div>
+          <div className="empty-icon" style={{ color: '#bfbfbf' }}>—</div>
           <div>暂无客户数据</div>
         </div>
       )}

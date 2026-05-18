@@ -123,7 +123,7 @@ const CommunicationTimeline = ({ standalone }) => {
 
         {communications.length === 0 && (
           <div className="empty-state" style={{ padding: '20px' }}>
-            <div style={{ fontSize: '32px', marginBottom: '8px' }}>💬</div>
+            <div style={{ fontSize: '32px', marginBottom: '8px' }}>...</div>
             <div>暂无沟通记录</div>
           </div>
         )}

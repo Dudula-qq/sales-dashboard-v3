@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import ReactECharts from 'echarts-for-react';
 import { funnelApi, customerApi } from '../../services/api';
+import { onDataChange } from '../../services/dataEvents';
 
 const CustomerFunnel = ({ user }) => {
   const [funnelData, setFunnelData] = useState([]);
 
   useEffect(() => {
     loadData();
+    const off = onDataChange('customer_changed', loadData);
+    return off;
   }, [user]);
 
   const loadData = async () => {
