@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
-  base: '/sales-dashboard/',
+  base: '/sales-dashboard-v2/',
   plugins: [react()],
   server: {
     port: 5173,
