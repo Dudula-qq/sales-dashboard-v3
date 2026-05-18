@@ -975,6 +975,101 @@ export const agentApi = {
       reply = parseLeadMessage(message);
     }
 
+    if (agent.tools.includes('work_summary')) {
+      const totalProjects = projects.length;
+      const totalCustomers = customers.length;
+      const s1 = projects.filter(p => p.stage === 'S1').length;
+      const s2 = projects.filter(p => p.stage === 'S2').length;
+      const s3 = projects.filter(p => p.stage === 'S3').length;
+      const s4 = projects.filter(p => p.stage === 'S4').length;
+      const s5 = projects.filter(p => p.stage === 'S5').length;
+      const s6plus = projects.filter(p => ['S6','S7','S8'].includes(p.stage)).length;
+      const closed = projects.filter(p => p.stage === 'End').length;
+      const totalAmount = projects.reduce((s, p) => s + (p.amount || 0), 0);
+      const totalExpected = projects.reduce((s, p) => s + (p.expectedAmount || 0), 0);
+      const committedCount = customers.filter(c => c.grade === 'Committed').length;
+      const upsideCount = customers.filter(c => c.grade === 'Upside').length;
+      const probablyCount = customers.filter(c => c.grade === 'Probably').length;
+      const recentReports = dailyReports.filter(r => {
+        const d = new Date(r.date);
+        const now = new Date();
+        return (now - d) < 7 * 86400000;
+      }).length;
+      const overdueCustomers = customers.filter(c => {
+        if (!c.lastContact) return false;
+        return (new Date() - new Date(c.lastContact)) > 14 * 86400000;
+      }).length;
+      const pendingAlerts = alertsData.filter(a => !a.handled && !a.ignored).length;
+      const pplRatio = pplData.currentPPL && pplData.kpiTarget ? (pplData.currentPPL / pplData.kpiTarget).toFixed(1) : '-';
+      const kpiProb = pplData.kpiProbability || 0;
+
+      const isDaily = /今日|今天|日报|daily/i.test(message);
+      const isWeekly = /本周|周报|本周汇总|weekly/i.test(message);
+
+      if (isDaily) {
+        reply = `【今日工作汇总】\n` +
+          `\n一、项目概览` +
+          `\n  商机总数：${totalProjects} 个` +
+          `\n  商机总金额：¥${(totalAmount / 10000).toFixed(0)}万 | 预期金额：¥${(totalExpected / 10000).toFixed(0)}万` +
+          `\n  各阶段分布：S1(${s1}) → S2(${s2}) → S3(${s3}) → S4(${s4}) → S5(${s5}) → S6+(${s6plus}) → 已关闭(${closed})` +
+          `\n\n二、客户跟进` +
+          `\n  客户总数：${totalCustomers} 家` +
+          `\n  分级：Committed(${committedCount}) | Upside(${upsideCount}) | Probably(${probablyCount})` +
+          `\n  超期未跟进(>14天)：${overdueCustomers} 家` +
+          `\n\n三、日报情况` +
+          `\n  近7天日报提交：${recentReports} 份` +
+          `\n\n四、风险预警` +
+          `\n  待处理告警：${pendingAlerts} 条` +
+          `\n\n五、PPL健康度` +
+          `\n  PPL/KPI = ${pplRatio}x | KPI达成概率：${kpiProb}%` +
+          `\n  ${Number(pplRatio) >= 3 ? 'PPL健康，达标无忧。' : 'PPL不足，需补充Pipeline。'}`;
+      } else if (isWeekly) {
+        reply = `【本周工作汇总分析】\n` +
+          `\n━━ 项目推进 ━━` +
+          `\n  本周商机总量：${totalProjects} 个，总金额 ¥${(totalAmount / 10000).toFixed(0)}万` +
+          `\n  漏斗转化：S1(${s1}) → S2(${s2}) → S3(${s3}) → S4(${s4}) → S5(${s5}) → S6+(${s6plus}) → 成单(${closed})` +
+          `\n  转化率：${s1 > 0 ? ((closed / s1 * 100).toFixed(0)) : 0}%` +
+          `\n\n━━ 客户管理 ━━` +
+          `\n  客户总数：${totalCustomers} | Committed(${committedCount}) | Upside(${upsideCount}) | Probably(${probablyCount})` +
+          `\n  跟进风险：${overdueCustomers} 家超14天未跟进，需重点关注` +
+          `\n\n━━ PPL健康度 ━━` +
+          `\n  当前PPL ¥${pplData.currentPPL ? (pplData.currentPPL / 10000).toFixed(0) : 0}万 / KPI ¥${pplData.kpiTarget ? (pplData.kpiTarget / 10000).toFixed(0) : 0}万 = ${pplRatio}x` +
+          `\n  达成概率：${kpiProb}% | ${Number(pplRatio) >= 3 ? '健康' : '需关注'}` +
+          `\n\n━━ 风险预警 ━━` +
+          `\n  待处理告警 ${pendingAlerts} 条，建议优先处理跟进缺失和商机停滞类告警` +
+          `\n\n━━ 下周建议 ━━` +
+          `\n  1. 重点关注${overdueCustomers}家超期客户，安排跟进` +
+          `\n  2. 推进S3→S4阶段的${s3}个项目，加速方案落地` +
+          `\n  3. 补充Pipeline，当前PPL ${Number(pplRatio) < 3 ? '低于3x安全线' : '处于健康区间'}`;
+      } else {
+        reply = `【全维度工作汇总分析】\n` +
+          `\n━━ 商机总览 ━━` +
+          `\n  商机总数：${totalProjects} 个` +
+          `\n  总金额：¥${(totalAmount / 10000).toFixed(0)}万 | 预期：¥${(totalExpected / 10000).toFixed(0)}万` +
+          `\n  阶段分布：` +
+          `\n    S1 机会确认：${s1} 个` +
+          `\n    S2 建立关系：${s2} 个` +
+          `\n    S3 提出方案：${s3} 个` +
+          `\n    S4 达成协议：${s4} 个` +
+          `\n    S5 签署合同：${s5} 个` +
+          `\n    S6+ 交付验收：${s6plus} 个` +
+          `\n    已关闭：${closed} 个` +
+          `\n\n━━ 客户分级 ━━` +
+          `\n  总客户：${totalCustomers} 家` +
+          `\n  Committed：${committedCount} 家（高确定性）` +
+          `\n  Upside：${upsideCount} 家（有潜力）` +
+          `\n  Probably：${probablyCount} 家（初步接触）` +
+          `\n  超期未跟进：${overdueCustomers} 家` +
+          `\n\n━━ PPL健康度 ━━` +
+          `\n  PPL/KPI = ${pplRatio}x | 达成概率 ${kpiProb}%` +
+          `\n  ${Number(pplRatio) >= 3 ? '状态：健康' : '状态：需补充Pipeline'}` +
+          `\n\n━━ 风险预警 ━━` +
+          `\n  待处理告警：${pendingAlerts} 条` +
+          `\n  近7天日报：${recentReports} 份` +
+          `\n\n如需更详细的分析，请说"生成今日汇总"或"生成本周汇总"。`;
+      }
+    }
+
     if (agent.tools.includes('crm_query') && !reply) {
       const keyword = message.replace(/帮我|分析|查看|了解一下|的|情况|跟进/g, '').trim();
       const found = customers.find(c => c.name.includes(keyword));

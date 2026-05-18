@@ -245,6 +245,7 @@ export const agentTools = [
   { id: 'calendar_manage', name: '日历管理', desc: '创建和管理跟进计划' },
   { id: 'alert_notify', name: '告警通知', desc: '发送风险告警和提醒' },
   { id: 'lead_parse', name: '线索解析', desc: '解析线索沟通记录，自动提取客户/商机/跟进信息并写入各模块' },
+  { id: 'work_summary', name: '工作汇总分析', desc: '汇总分析所有销售工作数据，输出全维度工作汇总报告' },
 ];
 
 // 预设触发事件
@@ -300,6 +301,18 @@ export const conversationalAgents = [
     instructions: '你是一位专业的线索记录专员，擅长从非结构化的沟通记录中提取关键信息，包括客户名称、联系人、需求、商机阶段、金额、竞对信息、下一步计划等，并自动将信息写入对应模块。',
     tools: ['lead_parse', 'crm_query'],
     greeting: '你好！我是线索记录助手，只需粘贴一段客户沟通记录，我就能帮你自动提取信息并同步到各个模块。请直接粘贴你的沟通记录内容。',
+    createdBy: 'manager',
+    createdAt: '2026-05-12',
+  },
+  {
+    id: 'conv-004',
+    name: '工作汇总分析师',
+    type: 'conversational',
+    description: '汇总分析所有销售工作数据，输出日报/周报/月度汇总，包含项目进展、客户跟进、商机阶段、风险预警、PPL健康度等全维度分析',
+    role: '数据分析专家',
+    instructions: '你是一位数据分析专家，擅长从多维度汇总分析销售工作数据，输出结构化的工作汇总报告。覆盖项目进展、客户跟进、商机阶段分布、风险预警、PPL健康度等，用数据和图表说话，为管理层提供决策依据。',
+    tools: ['work_summary', 'crm_query'],
+    greeting: '你好！我是工作汇总分析师，可以帮你汇总分析所有销售工作数据，输出日报/周报/月度汇总。请告诉我你需要什么维度的分析，或直接说"生成今日汇总"。',
     createdBy: 'manager',
     createdAt: '2026-05-18',
   },
