@@ -28,14 +28,14 @@ const SalesLogin = ({ onLogin }) => {
   };
 
   return (
-    <div className="login-page">
-      <div className="login-container">
-        <div className="login-header">
-          <h1 className="login-title">销售看板</h1>
-          <p className="login-subtitle">内部AI工作追踪系统</p>
+    <div className="login-container">
+      <div className="login-card">
+        <div className="login-title">
+          <h1>销售看板</h1>
+          <p>内部AI工作追踪系统</p>
         </div>
         <form onSubmit={handleSubmit} className="login-form">
-          <div className="login-field">
+          <div className="form-group">
             <label>用户名</label>
             <input
               type="text"
@@ -45,7 +45,7 @@ const SalesLogin = ({ onLogin }) => {
               disabled={loading}
             />
           </div>
-          <div className="login-field">
+          <div className="form-group">
             <label>密码</label>
             <input
               type="password"
@@ -69,7 +69,11 @@ const SalesLogin = ({ onLogin }) => {
             </div>
             <div className="login-account-item" onClick={() => { setUsername('salesA'); setPassword('123456'); }}>
               <span className="account-name">salesA / 123456</span>
-              <span className="account-role role-sales">销售</span>
+              <span className="account-role role-sales">销售A</span>
+            </div>
+            <div className="login-account-item" onClick={() => { setUsername('salesB'); setPassword('123456'); }}>
+              <span className="account-name">salesB / 123456</span>
+              <span className="account-role role-sales">销售B</span>
             </div>
             <div className="login-account-item" onClick={() => { setUsername('ops01'); setPassword('123456'); }}>
               <span className="account-name">ops01 / 123456</span>
