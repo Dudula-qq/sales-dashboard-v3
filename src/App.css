@@ -5689,3 +5689,399 @@ body {
     transform: rotate(90deg);
   }
 }
+
+/* ===== 运营视角样式 ===== */
+.sidebar-role-tag {
+  font-size: 11px;
+  color: var(--text-light);
+  text-align: center;
+  padding: 6px 0;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 4px;
+}
+
+.ops-dash-header h2,
+.ops-dash-header h2 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.ops-count {
+  font-size: 13px;
+  color: var(--text-light);
+  margin-left: 12px;
+}
+
+/* 运营指标卡片 */
+.ops-metrics-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.ops-metric-card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 16px 20px;
+  border-left: 4px solid #d9d9d9;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+.ops-metric-num {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.ops-metric-label {
+  font-size: 12px;
+  color: var(--text-light);
+  margin-top: 4px;
+}
+
+/* 运营区块 */
+.ops-section {
+  margin-bottom: 20px;
+}
+
+.ops-section-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.ops-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+/* 客户分级概览 */
+.ops-grade-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.ops-grade-item {
+  text-align: center;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #f0f0f0;
+}
+
+.ops-grade-num {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.ops-grade-label {
+  font-size: 13px;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.ops-grade-sub {
+  font-size: 11px;
+  color: var(--text-light);
+}
+
+/* 图表区 */
+.ops-charts-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.ops-chart-card {
+  background: #fff;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.ops-empty-chart {
+  text-align: center;
+  color: var(--text-light);
+  padding: 60px 0;
+  font-size: 13px;
+}
+
+/* PPL健康条 */
+.ops-ppl-bar {
+  margin-top: 4px;
+}
+
+.ops-ppl-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.ops-ppl-status {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.ops-ppl-status.ok { color: #52c41a; background: #f6ffed; }
+.ops-ppl-status.warn { color: #fa8c16; background: #fff7e6; }
+
+.ops-ppl-track {
+  height: 8px;
+  background: #f0f0f0;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.ops-ppl-3x-mark {
+  position: absolute;
+  left: 50%;
+  top: -2px;
+  width: 2px;
+  height: 12px;
+  background: #999;
+}
+
+.ops-ppl-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+
+.ops-ppl-fill.ok { background: #52c41a; }
+.ops-ppl-fill.warn { background: #fa8c16; }
+
+.ops-ppl-metrics {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* 工作量表格 */
+.ops-workload-table {
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ops-wl-header, .ops-wl-row {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr 0.8fr 1fr;
+  padding: 10px 16px;
+  font-size: 13px;
+}
+
+.ops-wl-header {
+  background: #fafafa;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.ops-wl-row {
+  border-top: 1px solid #f5f5f5;
+}
+
+.ops-wl-name { font-weight: 500; color: var(--text-primary); }
+.ops-wl-amount { color: var(--primary-color); font-weight: 500; }
+
+/* 日报列表 */
+.ops-recent-reports {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ops-report-item {
+  background: #fafafa;
+  border-radius: 6px;
+  padding: 10px 14px;
+}
+
+.ops-report-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+  font-size: 12px;
+}
+
+.ops-report-user { font-weight: 600; color: var(--text-primary); }
+.ops-report-date { color: var(--text-light); }
+.ops-report-tag { padding: 1px 6px; background: #e6f7ff; color: #1890ff; border-radius: 3px; font-size: 10px; }
+.ops-report-content { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+.ops-empty { text-align: center; color: var(--text-light); padding: 24px; font-size: 13px; }
+
+/* 告警严重度 */
+.ops-severity-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.ops-sev-card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 14px 16px;
+  border-left: 4px solid #d9d9d9;
+}
+
+.ops-sev-num { font-size: 22px; font-weight: 700; }
+.ops-sev-label { font-size: 12px; color: var(--text-light); margin-top: 2px; }
+
+/* 告警状态 */
+.ops-status-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  padding: 20px 0;
+}
+
+.ops-status-item { text-align: center; }
+.ops-status-num { font-size: 28px; font-weight: 700; }
+.ops-status-label { font-size: 12px; color: var(--text-light); margin-top: 2px; }
+.pending-num { color: #fa8c16; }
+.handled-num { color: #52c41a; }
+.ignored-num { color: #8c8c8c; }
+
+/* 告警筛选 */
+.ops-filter-pills {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.ops-pill {
+  padding: 4px 14px;
+  border: 1px solid #d9d9d9;
+  border-radius: 14px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+}
+
+.ops-pill:hover { border-color: var(--primary-color); color: var(--primary-color); }
+.ops-pill.active { background: var(--primary-color); color: #fff; border-color: var(--primary-color); }
+
+/* 告警明细 */
+.ops-alert-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ops-alert-item {
+  border-radius: 8px;
+  padding: 12px 16px;
+  border-left: 4px solid #fa8c16;
+  background: #fafafa;
+}
+
+.ops-alert-item.severity-red { border-left-color: #f5222d; }
+.ops-alert-item.severity-orange { border-left-color: #fa8c16; }
+.ops-alert-item.severity-yellow { border-left-color: #d4b106; }
+.ops-alert-item.severity-purple { border-left-color: #722ed1; }
+
+.ops-ai-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 13px;
+}
+
+.ops-ai-type {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.ops-ai-object { font-weight: 500; color: var(--text-primary); }
+.ops-ai-sales { color: var(--text-light); font-size: 12px; }
+
+.ops-ai-status {
+  margin-left: auto;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+}
+
+.ops-ai-status.pending { background: #fff7e6; color: #fa8c16; }
+.ops-ai-status.handled { background: #f6ffed; color: #52c41a; }
+.ops-ai-status.ignored { background: #f5f5f5; color: #8c8c8c; }
+
+.ops-ai-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+.ops-ai-time { font-size: 11px; color: var(--text-light); margin-top: 4px; }
+
+/* 项目卡片 */
+.ops-project-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ops-project-card {
+  background: #fafafa;
+  border-radius: 8px;
+  padding: 12px 16px;
+  border-left: 4px solid #d9d9d9;
+}
+
+.ops-pc-row1 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.ops-pc-name { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+.ops-pc-stage {
+  padding: 1px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.ops-pc-grade {
+  padding: 1px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  background: #f0f5ff;
+  color: #2f54eb;
+}
+
+.ops-pc-row2 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.ops-pc-amount { color: var(--primary-color); font-weight: 500; }
+.ops-pc-close { color: var(--text-light); font-size: 11px; }
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .ops-metrics-row { grid-template-columns: repeat(2, 1fr); }
+  .ops-charts-row { grid-template-columns: 1fr; }
+  .ops-severity-row { grid-template-columns: repeat(2, 1fr); }
+  .ops-grade-row { grid-template-columns: 1fr; }
+}

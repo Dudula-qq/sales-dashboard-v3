@@ -1,12 +1,27 @@
 import React from 'react';
 
 const allMenuItems = [
-  { key: 'dashboard', label: '内容概览' },
-  { key: 'daily', label: '工作汇报' },
-  { key: 'opportunity', label: '商机及客户管理' },
-  { key: 'alert-calendar', label: '风险告警' },
+  // ===== 负责人视角 =====
+  { key: 'dashboard', label: '内容概览', roles: ['manager'] },
+  { key: 'daily', label: '工作汇报', roles: ['manager'] },
+  { key: 'opportunity', label: '商机及客户管理', roles: ['manager'] },
+  { key: 'alert-calendar', label: '风险告警', roles: ['manager'] },
   { key: 'ppl', label: 'PPL管理', roles: ['manager'] },
-  { key: 'agent', label: 'AI助手' },
+  { key: 'agent', label: 'AI助手', roles: ['manager'] },
+
+  // ===== 销售视角 =====
+  { key: 'sales-dashboard', label: '我的概览', roles: ['sales'] },
+  { key: 'sales-daily', label: '工作汇报', roles: ['sales'] },
+  { key: 'sales-opportunity', label: '商机及客户管理', roles: ['sales'] },
+  { key: 'sales-alert', label: '风险告警', roles: ['sales'] },
+  { key: 'agent', label: 'AI助手', roles: ['sales'] },
+
+  // ===== 运营视角 =====
+  { key: 'ops-dashboard', label: '运营概览', roles: ['ops'] },
+  { key: 'ops-report', label: '汇报管理', roles: ['ops'] },
+  { key: 'ops-project', label: '项目跟进', roles: ['ops'] },
+  { key: 'ops-alert', label: '风险监控', roles: ['ops'] },
+  { key: 'agent', label: 'AI助手', roles: ['ops'] },
 ];
 
 const Sidebar = ({ collapsed, activeMenu, onMenuClick, onToggle, user }) => {
@@ -20,7 +35,9 @@ const Sidebar = ({ collapsed, activeMenu, onMenuClick, onToggle, user }) => {
       <div className="sidebar-header">
         <span className="sidebar-logo">{collapsed ? 'S' : '销售看板'}</span>
       </div>
-
+      <div className="sidebar-role-tag">
+        {user?.role === 'manager' ? '负责人视角' : user?.role === 'ops' ? '运营视角' : '销售视角'}
+      </div>
       <nav className="sidebar-menu">
         {menuItems.map(item => (
           <div
@@ -32,7 +49,6 @@ const Sidebar = ({ collapsed, activeMenu, onMenuClick, onToggle, user }) => {
           </div>
         ))}
       </nav>
-
       <div className="sidebar-toggle" onClick={onToggle}>
         {collapsed ? '\u203A' : '\u2039'}
       </div>

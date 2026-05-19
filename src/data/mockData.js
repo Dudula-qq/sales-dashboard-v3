@@ -108,9 +108,10 @@ export const customerStatuses = ['线索', '意向', '报价', '成交'];
 
 // 用户数据
 export const users = [
-  { id: 1, username: 'admin', password: '123456', name: '管理员', role: 'manager' },
+  { id: 1, username: 'admin', password: '123456', name: '负责人', role: 'manager' },
   { id: 2, username: 'salesA', password: '123456', name: '销售A', role: 'sales' },
-  { id: 3, username: 'salesB', password: '123456', name: '销售B', role: 'sales' }
+  { id: 3, username: 'salesB', password: '123456', name: '销售B', role: 'sales' },
+  { id: 4, username: 'ops01', password: '123456', name: '运营人员', role: 'ops' }
 ];
 
 // ============ V2.0 新增数据 ============
