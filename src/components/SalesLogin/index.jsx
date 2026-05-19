@@ -17,74 +17,63 @@ const SalesLogin = ({ onLogin }) => {
     }
 
     setLoading(true);
-    try {
-      const result = await authApi.login(username, password);
-      if (result.success) {
-        onLogin(result.user);
-      } else {
-        setError(result.message);
-      }
-    } catch (err) {
-      setError('登录失败，请重试');
-    }
+    const result = await authApi.login(username, password);
     setLoading(false);
+
+    if (result.success) {
+      onLogin(result.user);
+    } else {
+      setError('用户名或密码错误');
+    }
   };
 
   return (
-    <div className="login-container">
-      <div className="login-card">
-        <div className="login-title">
-          <h1>销售工作进度追踪系统</h1>
-          <p>请登录以继续</p>
+    <div className="login-page">
+      <div className="login-container">
+        <div className="login-header">
+          <h1 className="login-title">销售看板</h1>
+          <p className="login-subtitle">内部AI工作追踪系统</p>
         </div>
-
-        <form className="login-form" onSubmit={handleSubmit}>
-          <div className="form-group">
+        <form onSubmit={handleSubmit} className="login-form">
+          <div className="login-field">
             <label>用户名</label>
             <input
               type="text"
-              placeholder="请输入用户名"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={e => setUsername(e.target.value)}
+              placeholder="请输入用户名"
               disabled={loading}
             />
           </div>
-
-          <div className="form-group">
+          <div className="login-field">
             <label>密码</label>
             <input
               type="password"
-              placeholder="请输入密码"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={e => setPassword(e.target.value)}
+              placeholder="请输入密码"
               disabled={loading}
             />
           </div>
-
-          {error && (
-            <div className="login-error">{error}</div>
-          )}
-
-          <button
-            type="submit"
-            className="login-btn"
-            disabled={loading}
-          >
+          {error && <div className="login-error">{error}</div>}
+          <button type="submit" className="login-btn" disabled={loading}>
             {loading ? '登录中...' : '登 录'}
           </button>
         </form>
-
-        <div style={{ marginTop: '24px', textAlign: 'center', color: '#666', fontSize: '13px' }}>
-          <p style={{ marginBottom: '12px', color: '#999' }}>测试账号</p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <div style={{ background: '#f5f5f5', padding: '8px 16px', borderRadius: '4px' }}>
-              <strong style={{ color: '#1890ff' }}>管理员:</strong> admin / 123456
+        <div className="login-accounts">
+          <p className="login-accounts-title">测试账号</p>
+          <div className="login-account-list">
+            <div className="login-account-item" onClick={() => { setUsername('admin'); setPassword('123456'); }}>
+              <span className="account-name">admin / 123456</span>
+              <span className="account-role role-manager">负责人</span>
             </div>
-            <div style={{ background: '#f5f5f5', padding: '8px 16px', borderRadius: '4px' }}>
-              <strong style={{ color: '#52c41a' }}>销售A:</strong> salesA / 123456
+            <div className="login-account-item" onClick={() => { setUsername('salesA'); setPassword('123456'); }}>
+              <span className="account-name">salesA / 123456</span>
+              <span className="account-role role-sales">销售</span>
             </div>
-            <div style={{ background: '#f5f5f5', padding: '8px 16px', borderRadius: '4px' }}>
-              <strong style={{ color: '#fa8c16' }}>销售B:</strong> salesB / 123456
+            <div className="login-account-item" onClick={() => { setUsername('ops01'); setPassword('123456'); }}>
+              <span className="account-name">ops01 / 123456</span>
+              <span className="account-role role-ops">运营</span>
             </div>
           </div>
         </div>

@@ -358,6 +358,54 @@ body {
   font-size: 14px;
 }
 
+.login-accounts {
+  margin-top: 20px;
+}
+
+.login-accounts-title {
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 8px;
+}
+
+.login-account-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.login-account-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: #f5f5f5;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.login-account-item:hover {
+  background: #e6f7ff;
+}
+
+.account-name {
+  font-size: 13px;
+  color: #333;
+  font-family: monospace;
+}
+
+.account-role {
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.role-manager { background: #fff1f0; color: #f5222d; }
+.role-sales { background: #e6f7ff; color: #1890ff; }
+.role-ops { background: #f6ffed; color: #52c41a; }
+
 /* 看板样式 */
 .kanban-board {
   display: flex;
