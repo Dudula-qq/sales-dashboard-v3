@@ -204,11 +204,10 @@ function App() {
           return (
             <div>
               <div className="tm-tabs" style={{ marginBottom: 20 }}>
-                <button className={`tm-tab ${dailyTab === 'input' ? 'active' : ''}`} onClick={() => setDailyTab('input')}>日报录入</button>
                 <button className={`tm-tab ${dailyTab === 'summary' ? 'active' : ''}`} onClick={() => setDailyTab('summary')}>日报汇总</button>
                 <button className={`tm-tab ${dailyTab === 'weekly' ? 'active' : ''}`} onClick={() => setDailyTab('weekly')}>周报解析</button>
               </div>
-              {dailyTab === 'input' ? <DailyReportInput user={currentUser} /> : dailyTab === 'summary' ? <DailyReportSummary /> : <WeeklyReportDashboard />}
+              {dailyTab === 'summary' ? <DailyReportSummary /> : <WeeklyReportDashboard />}
             </div>
           );
         case 'opportunity':
