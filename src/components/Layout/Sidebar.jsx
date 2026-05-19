@@ -2,7 +2,7 @@ import React from 'react';
 
 const allMenuItems = [
   { key: 'dashboard', label: '工作汇总' },
-  { key: 'daily', label: '日报管理' },
+  { key: 'daily', label: '工作汇报' },
   { key: 'opportunity', label: '商机及客户管理' },
   { key: 'alert-calendar', label: '风险告警' },
   { key: 'ppl', label: 'PPL管理', roles: ['manager'] },
